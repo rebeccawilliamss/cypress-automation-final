@@ -1,0 +1,24 @@
+jobs:
+  - job: Job_1
+    displayName: Agent job 1
+    pool:
+      name: TestAutomation
+    steps:
+      - checkout: self
+      - task: Npm@1
+        displayName: Install Packages
+        inputs:
+          workingDir: cypress
+          verbose: false
+      - task: PowerShell@2
+        displayName: Run Tests
+        continueOnError: True
+        inputs:
+          targetType: inline
+          script: run test
+          errorActionPreference: continue
+      - task: PublishTestResults@2
+        displayName: Publish Test Results
+        continueOnError: True
+        inputs:
+          testResultsFiles: "**/results/result-*.xml"
